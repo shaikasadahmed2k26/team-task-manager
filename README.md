@@ -6,14 +6,14 @@ A full-stack collaborative task management web application inspired by tools lik
 ---
 
 ## 🌐 Live Demo
-> [Add your Railway URL here after deployment]
+> https://team-task-manager-two-navy.vercel.app
 
 ---
 
-## 📽️ Demo Video
-> [Add your video link here]
+## 🔌 Backend API
+> https://team-task-manager-production-5677.up.railway.app
 
----
+
 
 ## 🛠️ Tech Stack
 
@@ -168,7 +168,7 @@ team-task-manager/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/team-task-manager.git
+git clone https://github.com/shaikasadahmed2k23/team-task-manager.git
 cd team-task-manager
 ```
 
