@@ -16,6 +16,7 @@
   --text-primary: #1a1a2e;
   --text-secondary: #6b7280;
   --border: #e5e7eb;
+  --modal-overlay: rgba(0, 0, 0, 0.4);
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
@@ -744,7 +745,7 @@ body {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--modal-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -754,7 +755,7 @@ body {
 }
 
 .modal {
-  background: white;
+  background: var(--surface);
   border-radius: var(--radius-lg);
   padding: 32px;
   width: 100%;
@@ -879,6 +880,7 @@ textarea:focus {
     --text-primary: #e2e8f0;
     --text-secondary: #94a3b8;
     --border: #2d2d44;
+    --modal-overlay: rgba(0, 0, 0, 0.6);
     --primary-light: #2d2b55;
   }
 }
@@ -892,6 +894,7 @@ body.dark {
   --text-primary: #e2e8f0;
   --text-secondary: #94a3b8;
   --border: #2d2d44;
+  --modal-overlay: rgba(0, 0, 0, 0.6);
   --primary-light: #2d2b55;
 }
 
@@ -1003,42 +1006,56 @@ body.dark .modal-close:hover {
   color: var(--text-primary) !important;
 }
 
+html.dark input,
+body.dark input,
+html.dark textarea,
+body.dark textarea,
 html.dark select,
 body.dark select {
-  background: var(--surface) !important;
+  background: #1e1e35 !important;
   color: var(--text-primary) !important;
   border: 1.5px solid var(--border) !important;
 }
 
+html.dark input:focus,
+body.dark input:focus,
+html.dark textarea:focus,
+body.dark textarea:focus,
 html.dark select:focus,
 body.dark select:focus {
+  background: #1e1e35 !important;
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1) !important;
 }
 
-html.dark textarea,
-body.dark textarea {
-  background: var(--surface) !important;
-  color: var(--text-primary) !important;
-  border: 1.5px solid var(--border) !important;
+html.dark input::placeholder,
+body.dark input::placeholder,
+html.dark textarea::placeholder,
+body.dark textarea::placeholder {
+  color: #64748b !important;
 }
 
-html.dark textarea:focus,
-body.dark textarea:focus {
-  border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1) !important;
+html.dark input:-webkit-autofill,
+body.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover,
+body.dark input:-webkit-autofill:hover,
+html.dark input:-webkit-autofill:focus,
+body.dark input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #e2e8f0 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #1e1e35 inset !important;
+  box-shadow: 0 0 0px 1000px #1e1e35 inset !important;
 }
 
 html.dark .form-group input,
 body.dark .form-group input {
-  background: var(--surface) !important;
+  background: #1e1e35 !important;
   color: var(--text-primary) !important;
   border: 1.5px solid var(--border) !important;
 }
 
 html.dark .form-group input:focus,
 body.dark .form-group input:focus {
-  background: var(--surface) !important;
+  background: #1e1e35 !important;
   border: 1.5px solid var(--primary) !important;
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1) !important;
 }
@@ -1078,7 +1095,7 @@ body.dark .column-count {
 
 html.dark .task-card,
 body.dark .task-card {
-  background: var(--surface) !important;
+  background: #1e1e35 !important;
   border: 1px solid var(--border) !important;
 }
 

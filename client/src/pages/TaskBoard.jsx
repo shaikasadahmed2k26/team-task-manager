@@ -4,7 +4,7 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import Sidebar from '../components/Sidebar'
 import API from '../api/axios'
 import toast from 'react-hot-toast'
-import { Plus, X, ArrowLeft, Calendar } from 'lucide-react'
+import { Plus, X, ArrowLeft, Calendar, Users } from 'lucide-react'
 
 const COLUMNS = [
     { id: 'todo', label: 'To Do', color: '#6b7280' },
@@ -17,7 +17,10 @@ export default function TaskBoard() {
     const navigate = useNavigate()
     const [tasks, setTasks] = useState([])
     const [users, setUsers] = useState([])
+    const [userRole, setUserRole] = useState('member')
     const [showModal, setShowModal] = useState(false)
+    const [showMemberModal, setShowMemberModal] = useState(false)
+    const [memberEmail, setMemberEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         title: '', description: '', priority: 'medium',
@@ -38,9 +41,19 @@ export default function TaskBoard() {
         } catch { console.error('Failed to load users') }
     }
 
+    const fetchRole = async () => {
+        try {
+            const { data } = await API.get(`/projects/${id}/role`)
+            setUserRole(data.role)
+        } catch {
+            console.error('Failed to fetch role')
+        }
+    }
+
     useEffect(() => {
         fetchTasks()
         fetchUsers()
+        fetchRole()
     }, [id])
 
     const handleCreate = async (e) => {
@@ -65,6 +78,21 @@ export default function TaskBoard() {
             toast.success('Task deleted')
             fetchTasks()
         } catch { toast.error('Failed to delete task') }
+    }
+
+    const handleAddMember = async (e) => {
+        e.preventDefault()
+        try {
+            await API.post('/projects/add-member', {
+                project_id: id,
+                user_email: memberEmail
+            })
+            toast.success('Member added!')
+            setShowMemberModal(false)
+            setMemberEmail('')
+        } catch (err) {
+            toast.error(err.response?.data?.error || 'Failed to add member')
+        }
     }
 
     const onDragEnd = async (result) => {
@@ -99,9 +127,18 @@ export default function TaskBoard() {
                             <p className="page-subtitle">Drag and drop tasks to update status</p>
                         </div>
                     </div>
-                    <button className="btn btn-icon" onClick={() => setShowModal(true)}>
-                        <Plus size={18} /> Add Task
-                    </button>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        {userRole === 'admin' && (
+                            <button className="btn btn-icon" onClick={() => setShowModal(true)}>
+                                <Plus size={18} /> Add Task
+                            </button>
+                        )}
+                        {userRole === 'admin' && (
+                            <button className="btn btn-outline" onClick={() => setShowMemberModal(true)}>
+                                <Users size={18} /> Add Member
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <DragDropContext onDragEnd={onDragEnd}>
@@ -153,16 +190,18 @@ export default function TaskBoard() {
                                                         >
                                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                                                 <div className="task-title">{task.title}</div>
-                                                                <button
-                                                                    onClick={() => handleDelete(task.id)}
-                                                                    style={{
-                                                                        background: 'none', border: 'none',
-                                                                        cursor: 'pointer', color: '#9ca3af',
-                                                                        padding: '2px', flexShrink: 0
-                                                                    }}
-                                                                >
-                                                                    <X size={14} />
-                                                                </button>
+                                                                {userRole === 'admin' && (
+                                                                    <button
+                                                                        onClick={() => handleDelete(task.id)}
+                                                                        style={{
+                                                                            background: 'none', border: 'none',
+                                                                            cursor: 'pointer', color: '#9ca3af',
+                                                                            padding: '2px', flexShrink: 0
+                                                                        }}
+                                                                    >
+                                                                        <X size={14} />
+                                                                    </button>
+                                                                )}
                                                             </div>
                                                             {task.description && (
                                                                 <div className="task-desc">{task.description}</div>
@@ -258,6 +297,42 @@ export default function TaskBoard() {
                                     </button>
                                     <button type="submit" className="btn btn-icon" disabled={loading}>
                                         {loading ? 'Creating...' : 'Create Task'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {showMemberModal && (
+                    <div className="modal-overlay" onClick={() => setShowMemberModal(false)}>
+                        <div className="modal" onClick={e => e.stopPropagation()}>
+                            <div className="modal-header">
+                                <h2 className="modal-title">Add Member</h2>
+                                <button className="modal-close" onClick={() => setShowMemberModal(false)}>
+                                    <X size={20} />
+                                </button>
+                            </div>
+                            <form onSubmit={handleAddMember}>
+                                <div className="form-group">
+                                    <label>Member Email</label>
+                                    <input
+                                        type="email"
+                                        placeholder="Enter their email address"
+                                        value={memberEmail}
+                                        onChange={e => setMemberEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+                                    Note: The person must already have an account
+                                </p>
+                                <div className="modal-actions">
+                                    <button type="button" className="btn btn-outline" onClick={() => setShowMemberModal(false)}>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="btn btn-icon">
+                                        Add Member
                                     </button>
                                 </div>
                             </form>

@@ -60,3 +60,20 @@ exports.removeMember = async (req, res) => {
         res.status(500).json({ error: err.message })
     }
 }
+
+exports.getProjectRole = async (req, res) => {
+    const { project_id } = req.params
+    const userId = req.user.id
+    try {
+        const { data, error } = await supabase
+            .from('project_members')
+            .select('role')
+            .eq('project_id', project_id)
+            .eq('user_id', userId)
+            .single()
+        if (error) throw error
+        res.json({ role: data.role })
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}

@@ -2,12 +2,13 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../middleware/auth')
 const {
-    createProject, getProjects, addMember, removeMember
+    createProject, getProjects, addMember, removeMember, getProjectRole
 } = require('../controllers/projectController')
 
 router.post('/', auth, createProject)
 router.get('/', auth, getProjects)
 router.post('/add-member', auth, addMember)
 router.post('/remove-member', auth, removeMember)
+router.get('/:project_id/role', auth, getProjectRole)
 
 module.exports = router

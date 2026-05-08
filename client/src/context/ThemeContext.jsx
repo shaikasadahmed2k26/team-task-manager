@@ -31,6 +31,7 @@ export const ThemeProvider = ({ children }) => {
         document.documentElement.style.setProperty('--text-primary', '#e2e8f0')
         document.documentElement.style.setProperty('--text-secondary', '#94a3b8')
         document.documentElement.style.setProperty('--border', '#2d2d44')
+        document.documentElement.style.setProperty('--modal-overlay', 'rgba(0, 0, 0, 0.6)')
         document.documentElement.style.setProperty('--primary-light', '#2d2b55')
     }
 
@@ -41,6 +42,7 @@ export const ThemeProvider = ({ children }) => {
         document.documentElement.style.setProperty('--text-primary', '#1a1a2e')
         document.documentElement.style.setProperty('--text-secondary', '#6b7280')
         document.documentElement.style.setProperty('--border', '#e5e7eb')
+        document.documentElement.style.setProperty('--modal-overlay', 'rgba(0, 0, 0, 0.4)')
         document.documentElement.style.setProperty('--primary-light', '#ede9ff')
     }
 
